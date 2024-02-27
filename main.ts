@@ -28,6 +28,10 @@ function select_upgrade (selection: string) {
         remove_upgrade_from_list("ranged attack")
         ranged_attack_loop()
     }
+    if (selection == "movement speed") {
+        movement_speed += 10
+        controller.moveSprite(witch, movement_speed, movement_speed)
+    }
     sprites.allOfKind(SpriteKind.MiniMenu)[0].destroy()
 }
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.melee, function (enemy, proj) {
@@ -40,6 +44,12 @@ function setup_status_bars () {
     xp_bar = statusbars.create(160, 4, StatusBarKind.Magic)
     xp_bar.bottom = 120
     xp_bar.value = 0
+}
+function make_damage_number (damage: number, damaged_sprite: Sprite) {
+    number_sprite = textsprite.create(convertToText(damage), 0, 15)
+    number_sprite.setPosition(damaged_sprite.x, damaged_sprite.y)
+    number_sprite.vy = -5
+    number_sprite.lifespan = 1500
 }
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Projectile, function (sprite, otherSprite) {
     enemy_take_damage(sprite, otherSprite)
@@ -74,6 +84,7 @@ function base_attack_loop () {
 function enemy_take_damage (enemy: Sprite, proj: Sprite) {
     damage = Math.idiv(randint(attack_damage * 0.75, attack_damage * 1.25), 1)
     sprites.changeDataNumberBy(enemy, "hp", damage * -1)
+    make_damage_number(damage, enemy)
     if (sprites.readDataNumber(enemy, "hp") < 1) {
         enemy.destroy()
         info.changeScoreBy(100)
@@ -87,11 +98,13 @@ function setup_variables () {
     enemy_health = 5
     enemy_damage = 10
     enemies_spawn = 2
+    movement_speed = 100
     menu_upgrades = [
     miniMenu.createMenuItem("hp"),
     miniMenu.createMenuItem("attack damage"),
     miniMenu.createMenuItem("cooldown"),
-    miniMenu.createMenuItem("ranged attack")
+    miniMenu.createMenuItem("ranged attack"),
+    miniMenu.createMenuItem("movement speed")
     ]
 }
 function open_level_up_menu () {
@@ -130,7 +143,6 @@ function setup_sprites () {
 let enemy: Sprite = null
 let angle = 0
 let target: Sprite = null
-let witch: Sprite = null
 let proj: Sprite = null
 let upgrade_menu: miniMenu.MenuSprite = null
 let upgrade: miniMenu.MenuItem = null
@@ -141,6 +153,9 @@ let enemy_health = 0
 let damage = 0
 let melee_attack: Sprite = null
 let last_vx = 0
+let number_sprite: TextSprite = null
+let witch: Sprite = null
+let movement_speed = 0
 let health_bar: StatusBarSprite = null
 let attack_damage = 0
 let xp_bar: StatusBarSprite = null
@@ -168,4 +183,9 @@ game.onUpdateInterval(1000, function () {
             sprites.setDataNumber(enemy, "hp", randint(enemy_health * 0.75, enemy_health * 1.25))
         }
     }
+})
+game.onUpdateInterval(20000, function () {
+    enemy_health += 10
+    enemy_damage += 10
+    enemies_spawn += 1
 })
