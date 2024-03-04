@@ -1,5 +1,6 @@
 namespace SpriteKind {
     export const melee = SpriteKind.create()
+    export const XP = SpriteKind.create()
 }
 function remove_upgrade_from_list (item_text: string) {
     for (let value of menu_upgrades) {
@@ -32,11 +33,29 @@ function select_upgrade (selection: string) {
         movement_speed += 10
         controller.moveSprite(witch, movement_speed, movement_speed)
     }
+    if (selection == "damage range") {
+        melee_attack.scale += 0.2
+    }
     sprites.allOfKind(SpriteKind.MiniMenu)[0].destroy()
 }
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.melee, function (enemy, proj) {
     enemy_take_damage(enemy, proj)
 })
+function spawn_xp (source: Sprite) {
+    if (randint(1, 10) == 1) {
+        magnet_active = true
+        witch.startEffect(effects.halo, 5000)
+        timer.after(5000, function () {
+            magnet_active = false
+        })
+    }
+    xp_sprite = sprites.create(assets.image`jewel`, SpriteKind.XP)
+    xp_sprite.setPosition(source.x, source.y)
+    xp_sprite.x += randint(-10, 10)
+    xp_sprite.y += randint(-10, 10)
+    xp_sprite.scale = 0.75
+    xp_sprite.lifespan = 10000
+}
 function setup_status_bars () {
     health_bar = statusbars.create(60, 4, StatusBarKind.Health)
     health_bar.left = 0
@@ -81,14 +100,31 @@ function base_attack_loop () {
         base_attack_loop()
     })
 }
+function ghost_direction () {
+    for (let value of sprites.allOfKind(SpriteKind.Enemy)) {
+        if (value.vx > 0) {
+            value.setImage(assets.image`ghost right`)
+        } else {
+            value.setImage(assets.image`ghost left`)
+        }
+    }
+}
 function enemy_take_damage (enemy: Sprite, proj: Sprite) {
     damage = Math.idiv(randint(attack_damage * 0.75, attack_damage * 1.25), 1)
     sprites.changeDataNumberBy(enemy, "hp", damage * -1)
     make_damage_number(damage, enemy)
     if (sprites.readDataNumber(enemy, "hp") < 1) {
+        spawn_xp(enemy)
         enemy.destroy()
         info.changeScoreBy(100)
-        xp_bar.value += 10
+    }
+    pause(500)
+}
+function pull_in_xp () {
+    for (let value of sprites.allOfKind(SpriteKind.XP)) {
+        if (spriteutils.distanceBetween(witch, value) < 100 && magnet_active) {
+            value.follow(witch, 200)
+        }
     }
 }
 function setup_variables () {
@@ -99,12 +135,14 @@ function setup_variables () {
     enemy_damage = 10
     enemies_spawn = 2
     movement_speed = 100
+    magnet_active = false
     menu_upgrades = [
     miniMenu.createMenuItem("hp"),
     miniMenu.createMenuItem("attack damage"),
     miniMenu.createMenuItem("cooldown"),
     miniMenu.createMenuItem("ranged attack"),
-    miniMenu.createMenuItem("movement speed")
+    miniMenu.createMenuItem("movement speed"),
+    miniMenu.createMenuItem("damage range")
     ]
 }
 function open_level_up_menu () {
@@ -122,6 +160,10 @@ function open_level_up_menu () {
         select_upgrade(selection)
     })
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.XP, function (sprite, otherSprite) {
+    xp_bar.value += 10
+    sprites.destroy(otherSprite)
+})
 function ranged_attack_loop () {
     proj = sprites.create(assets.image`proj`, SpriteKind.Projectile)
     proj.setPosition(witch.x, witch.y)
@@ -137,6 +179,12 @@ function setup_sprites () {
     witch = sprites.create(assets.image`witch`, SpriteKind.Player)
     controller.moveSprite(witch)
     scene.cameraFollowSprite(witch)
+    characterAnimations.loopFrames(
+    witch,
+    assets.animation`walking`,
+    100,
+    characterAnimations.rule(Predicate.Moving)
+    )
     melee_attack = sprites.create(image.create(16, 16), SpriteKind.melee)
     melee_attack.scale = 2
 }
@@ -151,9 +199,11 @@ let enemies_spawn = 0
 let enemy_damage = 0
 let enemy_health = 0
 let damage = 0
-let melee_attack: Sprite = null
 let last_vx = 0
 let number_sprite: TextSprite = null
+let xp_sprite: Sprite = null
+let magnet_active = false
+let melee_attack: Sprite = null
 let witch: Sprite = null
 let movement_speed = 0
 let health_bar: StatusBarSprite = null
@@ -173,6 +223,8 @@ game.onUpdate(function () {
         last_vx = witch.vx
     }
     melee_attack.setPosition(witch.x, witch.y)
+    ghost_direction()
+    pull_in_xp()
 })
 game.onUpdateInterval(1000, function () {
     if (sprites.allOfKind(SpriteKind.Enemy).length < 50) {
