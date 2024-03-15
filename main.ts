@@ -13,6 +13,17 @@ statusbars.onStatusReached(StatusBarKind.Magic, statusbars.StatusComparison.EQ, 
     xp_bar.value = 0
     open_level_up_menu()
 })
+function aura_turn () {
+    sprites.changeDataNumberBy(aura, "angle", 5)
+    angle = sprites.readDataNumber(aura, "angle")
+    angle = spriteutils.degreesToRadians(angle)
+    spriteutils.placeAngleFrom(
+    aura,
+    angle,
+    20,
+    witch
+    )
+}
 function select_upgrade (selection: string) {
     if (selection == "attack damage") {
         attack_damage += 10
@@ -36,7 +47,16 @@ function select_upgrade (selection: string) {
     if (selection == "damage range") {
         melee_attack.scale += 0.2
     }
+    if (selection == "aura") {
+        remove_upgrade_from_list("aura")
+        aura.setImage(assets.image`aura`)
+    }
+    if (selection == "dual attack") {
+        remove_upgrade_from_list("dual attack")
+    }
     sprites.allOfKind(SpriteKind.MiniMenu)[0].destroy()
+    sprites.allOfKind(SpriteKind.Text)[0].destroy()
+    effects.confetti.endScreenEffect()
 }
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.melee, function (enemy, proj) {
     enemy_take_damage(enemy, proj)
@@ -81,6 +101,16 @@ statusbars.onZero(StatusBarKind.Health, function (status) {
     game.over(false)
 })
 function base_attack_loop () {
+    dual_active = true
+    for (let value of menu_upgrades) {
+        if (miniMenu.getMenuItemProperty(value, MenuItemProperty.Text) == "dual attack") {
+            dual_active = false
+        }
+    }
+    if (dual_active) {
+        dual_attack_loop()
+        return
+    }
     if (last_vx > 0) {
         animation.runImageAnimation(
         melee_attack,
@@ -109,6 +139,17 @@ function ghost_direction () {
         }
     }
 }
+function dual_attack_loop () {
+    animation.runImageAnimation(
+    melee_attack,
+    assets.animation`fireball both`,
+    100,
+    false
+    )
+    timer.after(cooldown, function () {
+        dual_attack_loop()
+    })
+}
 function enemy_take_damage (enemy: Sprite, proj: Sprite) {
     damage = Math.idiv(randint(attack_damage * 0.75, attack_damage * 1.25), 1)
     sprites.changeDataNumberBy(enemy, "hp", damage * -1)
@@ -117,6 +158,10 @@ function enemy_take_damage (enemy: Sprite, proj: Sprite) {
         spawn_xp(enemy)
         enemy.destroy()
         info.changeScoreBy(100)
+        if (randint(1, 10) == 1) {
+            heart = sprites.create(assets.image`heart`, SpriteKind.Food)
+            heart.setPosition(enemy.x, enemy.y)
+        }
     }
     pause(500)
 }
@@ -142,7 +187,9 @@ function setup_variables () {
     miniMenu.createMenuItem("cooldown"),
     miniMenu.createMenuItem("ranged attack"),
     miniMenu.createMenuItem("movement speed"),
-    miniMenu.createMenuItem("damage range")
+    miniMenu.createMenuItem("damage range"),
+    miniMenu.createMenuItem("aura"),
+    miniMenu.createMenuItem("dual attack")
     ]
 }
 function open_level_up_menu () {
@@ -159,9 +206,18 @@ function open_level_up_menu () {
     upgrade_menu.onButtonPressed(controller.A, function (selection, selectionIndex) {
         select_upgrade(selection)
     })
+    level_up_message = textsprite.create("LEVEL UP", 1, 15)
+    level_up_message.setMaxFontHeight(10)
+    level_up_message.setPosition(80, 20)
+    level_up_message.setBorder(3, 1)
+    effects.confetti.startScreenEffect()
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.XP, function (sprite, otherSprite) {
     xp_bar.value += 10
+    sprites.destroy(otherSprite)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
+    health_bar.value += health_bar.max / 2
     sprites.destroy(otherSprite)
 })
 function ranged_attack_loop () {
@@ -187,27 +243,33 @@ function setup_sprites () {
     )
     melee_attack = sprites.create(image.create(16, 16), SpriteKind.melee)
     melee_attack.scale = 2
+    aura = sprites.create(image.create(16, 16), SpriteKind.melee)
+    sprites.setDataNumber(aura, "angle", 0)
 }
 let enemy: Sprite = null
-let angle = 0
 let target: Sprite = null
 let proj: Sprite = null
+let level_up_message: TextSprite = null
 let upgrade_menu: miniMenu.MenuSprite = null
 let upgrade: miniMenu.MenuItem = null
 let upgrades: miniMenu.MenuItem[] = []
 let enemies_spawn = 0
 let enemy_damage = 0
 let enemy_health = 0
+let heart: Sprite = null
 let damage = 0
 let last_vx = 0
+let dual_active = false
 let number_sprite: TextSprite = null
 let xp_sprite: Sprite = null
 let magnet_active = false
 let melee_attack: Sprite = null
-let witch: Sprite = null
 let movement_speed = 0
 let health_bar: StatusBarSprite = null
 let attack_damage = 0
+let witch: Sprite = null
+let angle = 0
+let aura: Sprite = null
 let xp_bar: StatusBarSprite = null
 let menu_upgrades: miniMenu.MenuItem[] = []
 let cooldown = 0
@@ -225,6 +287,7 @@ game.onUpdate(function () {
     melee_attack.setPosition(witch.x, witch.y)
     ghost_direction()
     pull_in_xp()
+    aura_turn()
 })
 game.onUpdateInterval(1000, function () {
     if (sprites.allOfKind(SpriteKind.Enemy).length < 50) {

@@ -141,6 +141,44 @@ namespace myImages {
 ........................
 ........................
 `;
+            case "image7":
+            case "aura":return img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . 2 2 2 2 . . . . . . 
+. . . . 2 2 2 2 2 2 2 2 . . . . 
+. . . 2 2 2 2 4 4 2 2 2 2 . . . 
+. . . 2 2 4 4 4 4 4 4 2 2 . . . 
+. . 2 2 2 4 4 5 5 4 4 2 2 2 . . 
+. . 2 2 4 4 5 5 5 5 4 4 2 2 . . 
+. . 2 2 4 4 5 5 5 5 4 4 2 2 . . 
+. . 2 2 2 4 4 5 5 4 4 2 2 2 . . 
+. . . 2 2 4 4 4 4 4 4 2 2 . . . 
+. . . 2 2 2 2 4 4 2 2 2 2 . . . 
+. . . . 2 2 2 2 2 2 2 2 . . . . 
+. . . . . . 2 2 2 2 . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+`;
+            case "image8":
+            case "heart":return img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . f f f f f . f f f f f . . 
+. . f f 3 3 3 f f f 3 3 3 f f . 
+. . f 3 3 3 3 3 f 3 3 3 3 3 f . 
+. . f 3 3 3 3 3 3 3 1 1 3 3 f . 
+. . f 3 3 3 3 3 3 3 1 1 3 3 f . 
+. . f 3 3 3 3 3 3 3 3 3 3 3 f . 
+. . f f 3 3 3 b b b 3 3 3 f f . 
+. . . f f 3 b b b b b 3 f f . . 
+. . . . f f b b b b b f f . . . 
+. . . . . f f b b b f f . . . . 
+. . . . . . f f b f f . . . . . 
+. . . . . . . f f f . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+`;
         }
         return null;
     })
@@ -321,6 +359,76 @@ namespace myImages {
 ..........................................
 ..........................................
 `];
+            case "walking":
+            case "anim4":return [img`
+. . . . . . . c c c . . . . . . 
+. . . . . . c b 5 c . . . . . . 
+. . . . c c c 5 5 c c c . . . . 
+. . c c b c 5 5 5 5 c c c c . . 
+. c b b 5 b 5 5 5 5 b 5 b b c . 
+. c b 5 5 b b 5 5 b b 5 5 b c . 
+. . f 5 5 5 b b b b 5 5 5 c . . 
+. . f f 5 5 5 5 5 5 5 5 f f . . 
+. . f f f b f e e f b f f f . . 
+. . f f f 1 f b b f 1 f f f . . 
+. . . f f b b b b b b f f . . . 
+. . . e e f e e e e f e e . . . 
+. . e b c b 5 b b 5 b f b e . . 
+. . e e f 5 5 5 5 5 5 f e e . . 
+. . . . c b 5 5 5 5 b c . . . . 
+. . . . . f f f f f f . . . . . 
+`, img`
+. . . . . . . . . . . . . . . . 
+. . . . . . c c . . . . . . . . 
+. . . . . . c 5 c . . . . . . . 
+. . . . c c c 5 5 c c c . . . . 
+. . c c c c 5 5 5 5 c b c c . . 
+. c b b 5 b 5 5 5 5 b 5 b b c . 
+. c b 5 5 b b 5 5 b b 5 5 b c . 
+. . c 5 5 5 b b b b 5 5 5 f . . 
+. . f f 5 5 5 5 5 5 5 5 f f . . 
+. . f f f b f e e f b f f f . . 
+. . f f f 1 f b b f 1 f f f . . 
+. . . f f b b b b e e e f . . . 
+. . e b b f e e e e b b e . . . 
+. . e e f 5 5 b b e b b e . . . 
+. . . f 5 5 5 5 5 e e c . . . . 
+. . . . f f f f f f f . . . . . 
+`, img`
+. . . . . . c c c . . . . . . . 
+. . . . . . c 5 b c . . . . . . 
+. . . . c c c 5 5 c c c . . . . 
+. . c c c c 5 5 5 5 c b c c . . 
+. c b b 5 b 5 5 5 5 b 5 b b c . 
+. c b 5 5 b b 5 5 b b 5 5 b c . 
+. . c 5 5 5 b b b b 5 5 5 f . . 
+. . f f 5 5 5 5 5 5 5 5 f f . . 
+. . f f f b f e e f b f f f . . 
+. . f f f 1 f b b f 1 f f f . . 
+. . . f f b b b b b b f f . . . 
+. . . e e f e e e e f e e . . . 
+. . e b f b 5 b b 5 b c b e . . 
+. . e e f 5 5 5 5 5 5 f e e . . 
+. . . . c b 5 5 5 5 b c . . . . 
+. . . . . f f f f f f . . . . . 
+`, img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . c c . . . . . . 
+. . . . . . . c 5 c . . . . . . 
+. . . . c c c 5 5 c c c . . . . 
+. . c c b c 5 5 5 5 c c c c . . 
+. c b b 5 b 5 5 5 5 b 5 b b c . 
+. c b 5 5 b b 5 5 b b 5 5 b c . 
+. . f 5 5 5 b b b b 5 5 5 c . . 
+. . f f 5 5 5 5 5 5 5 5 f f . . 
+. . f f f b f e e f b f f f . . 
+. . f f f 1 f b b f 1 f f f . . 
+. . . f e e e b b b b f f . . . 
+. . . e b b e e e e f b b e . . 
+. . . e b b e b b 5 5 f e e . . 
+. . . . c e e 5 5 5 5 5 f . . . 
+. . . . . f f f f f f f . . . . 
+`];
             case "fireball both":
             case "anim3":return [img`
 ..........................................
@@ -407,76 +515,6 @@ namespace myImages {
 ..........................................
 ..........................................
 ..........................................
-`];
-            case "walking":
-            case "anim4":return [img`
-. . . . . . . c c c . . . . . . 
-. . . . . . c b 5 c . . . . . . 
-. . . . c c c 5 5 c c c . . . . 
-. . c c b c 5 5 5 5 c c c c . . 
-. c b b 5 b 5 5 5 5 b 5 b b c . 
-. c b 5 5 b b 5 5 b b 5 5 b c . 
-. . f 5 5 5 b b b b 5 5 5 c . . 
-. . f f 5 5 5 5 5 5 5 5 f f . . 
-. . f f f b f e e f b f f f . . 
-. . f f f 1 f b b f 1 f f f . . 
-. . . f f b b b b b b f f . . . 
-. . . e e f e e e e f e e . . . 
-. . e b c b 5 b b 5 b f b e . . 
-. . e e f 5 5 5 5 5 5 f e e . . 
-. . . . c b 5 5 5 5 b c . . . . 
-. . . . . f f f f f f . . . . . 
-`, img`
-. . . . . . . . . . . . . . . . 
-. . . . . . c c . . . . . . . . 
-. . . . . . c 5 c . . . . . . . 
-. . . . c c c 5 5 c c c . . . . 
-. . c c c c 5 5 5 5 c b c c . . 
-. c b b 5 b 5 5 5 5 b 5 b b c . 
-. c b 5 5 b b 5 5 b b 5 5 b c . 
-. . c 5 5 5 b b b b 5 5 5 f . . 
-. . f f 5 5 5 5 5 5 5 5 f f . . 
-. . f f f b f e e f b f f f . . 
-. . f f f 1 f b b f 1 f f f . . 
-. . . f f b b b b e e e f . . . 
-. . e b b f e e e e b b e . . . 
-. . e e f 5 5 b b e b b e . . . 
-. . . f 5 5 5 5 5 e e c . . . . 
-. . . . f f f f f f f . . . . . 
-`, img`
-. . . . . . c c c . . . . . . . 
-. . . . . . c 5 b c . . . . . . 
-. . . . c c c 5 5 c c c . . . . 
-. . c c c c 5 5 5 5 c b c c . . 
-. c b b 5 b 5 5 5 5 b 5 b b c . 
-. c b 5 5 b b 5 5 b b 5 5 b c . 
-. . c 5 5 5 b b b b 5 5 5 f . . 
-. . f f 5 5 5 5 5 5 5 5 f f . . 
-. . f f f b f e e f b f f f . . 
-. . f f f 1 f b b f 1 f f f . . 
-. . . f f b b b b b b f f . . . 
-. . . e e f e e e e f e e . . . 
-. . e b f b 5 b b 5 b c b e . . 
-. . e e f 5 5 5 5 5 5 f e e . . 
-. . . . c b 5 5 5 5 b c . . . . 
-. . . . . f f f f f f . . . . . 
-`, img`
-. . . . . . . . . . . . . . . . 
-. . . . . . . . c c . . . . . . 
-. . . . . . . c 5 c . . . . . . 
-. . . . c c c 5 5 c c c . . . . 
-. . c c b c 5 5 5 5 c c c c . . 
-. c b b 5 b 5 5 5 5 b 5 b b c . 
-. c b 5 5 b b 5 5 b b 5 5 b c . 
-. . f 5 5 5 b b b b 5 5 5 c . . 
-. . f f 5 5 5 5 5 5 5 5 f f . . 
-. . f f f b f e e f b f f f . . 
-. . f f f 1 f b b f 1 f f f . . 
-. . . f e e e b b b b f f . . . 
-. . . e b b e e e e f b b e . . 
-. . . e b b e b b 5 5 f e e . . 
-. . . . c e e 5 5 5 5 5 f . . . 
-. . . . . f f f f f f f . . . . 
 `];
         }
         return null;
